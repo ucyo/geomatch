@@ -80,7 +80,7 @@ def filter_candidates_by_time(center, candidate_list, delta):
     return result
 
 
-if __name__ == "__main__":
+def main():
     print("Loading data")
     client = connect()
     tropomi = get_tropomi(client)  # size: 155.654
@@ -98,3 +98,7 @@ if __name__ == "__main__":
 
     print(f"There are {filter_fin.index.size} matches for {source_id}")
     # plot_results(center, filter_fin, filter_fin.crs)
+
+
+if __name__ == "__main__":
+    main()

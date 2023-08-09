@@ -5,7 +5,7 @@ import concurrent.futures
 import time
 from datetime import timedelta
 
-import geomatch as gm
+from geomatch import geomatch as gm
 
 
 def create_query(center, distance_km, delta):
@@ -29,10 +29,10 @@ def create_query(center, distance_km, delta):
     return result
 
 
-def parallel_mongo(client, num, distance_km, delta, rparams={"_id"}):
+def parallel_mongo(client, tropomi, distance_km, delta, rparams=None):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {}
-        for k, center in tropomi[:num].iterrows():
+        for k, center in tropomi.iterrows():
             key = executor.submit(
                 mongo_query, client, center, distance_km, delta, rparams
             )
@@ -44,16 +44,16 @@ def parallel_mongo(client, num, distance_km, delta, rparams={"_id"}):
             except Exception as exc:
                 print("%r generated an exception: %s" % (tropomi_id, exc))
             else:
-                print(f"There are {len(data[1])} matches for {tropomi_id}")
+                print(f"There are {data.index.size} matches for {tropomi_id}")
 
 
-def mongo_query(client, center, distance_km, delta, rparams={"_id"}):
+def mongo_query(client, center, distance_km, delta, rparams=None):
     multiparam = create_query(center, distance_km, delta)
     result = client["IASI"].v0.find(multiparam, rparams)
     return gm._query_result_to_gdb(result)
 
 
-if __name__ == "__main__":
+def main():
     print("Loading data")
     client = gm.connect()
     tropomi = gm.get_tropomi(client)
@@ -62,9 +62,13 @@ if __name__ == "__main__":
     distance_km = 160.934
     n = int(tropomi.index.size * 0.0001)
 
-    print("Running queries")
+    print(f"Running {n} queries")
     tic = time.perf_counter()
-    parallel_mongo(client, n, distance_km, delta)
+    parallel_mongo(client, tropomi[:n], distance_km, delta)
     toc = time.perf_counter()
 
     print(f"Calculation was done in {toc - tic:0.4f} seconds")
+
+
+if __name__ == "__main__":
+    main()

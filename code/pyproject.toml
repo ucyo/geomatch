@@ -26,3 +26,8 @@ dev-dependencies = [
 ]
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.rye.scripts]
+geoparallel = { call = "geomatch.parallel:main" }
+geomongo = { call = "geomatch.mongo:main" }
+geomatch = { call = "geomatch.geomatch:main" }
