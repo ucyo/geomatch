@@ -102,6 +102,7 @@ def single(distance, delta, ident, ix):
 )
 @click.option("--file", default=None)
 def plot(distance, delta, ident, ix, file):
+    """Create a plot for a single query and compare both search algorithms."""
     delta = timedelta(minutes=delta)
     query = None
     if ident:
