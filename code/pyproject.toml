@@ -6,6 +6,8 @@ dependencies = [
     "shapely>=2.0.1",
     "geopandas>=0.13.2",
     "pymongo==3.13.0",
+    "icc_rt>=2020.0.133",
+    "numba>=0.57.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

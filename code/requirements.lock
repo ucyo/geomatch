@@ -14,7 +14,11 @@ click-plugins==1.1.1
 cligj==0.7.2
 fiona==1.9.4.post1
 geopandas==0.13.2
+icc-rt==2020.0.133
 importlib-metadata==6.8.0
+intel-openmp==2020.0.133
+llvmlite==0.40.1
+numba==0.57.1
 numpy==1.24.4
 packaging==23.1
 pandas==2.0.3

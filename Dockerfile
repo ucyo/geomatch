@@ -29,4 +29,13 @@ WORKDIR /home/python/code
 RUN rye config --set-bool behavior.global-python=true
 RUN rye sync
 
+# Needs to be added for numba to find the libsvm library
+# Check if it worked with `rye run numba -s`. It should look like following:
+# __SVML Information__
+# SVML State, config.USING_SVML                 : True
+# SVML Library Loaded                           : True
+# llvmlite Using SVML Patched LLVM              : True
+# SVML Operational                              : True
+ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/"
+
 CMD ["rye", "run", "python"]
