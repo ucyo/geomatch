@@ -31,3 +31,7 @@ allow-direct-references = true
 geoparallel = { call = "geomatch.parallel:main" }
 geomongo = { call = "geomatch.mongo:main" }
 geomatch = { call = "geomatch.geomatch:main" }
+lint = {chain = ["lint:black", "lint:flake8", "lint:isort"]}
+"lint:black" = "black --check src/"
+"lint:flake8" = "flake8 --ignore E501 src/"
+"lint:isort" = "isort --check src/"
