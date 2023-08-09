@@ -28,8 +28,7 @@ dev-dependencies = [
 allow-direct-references = true
 
 [tool.rye.scripts]
-geo = {call = "geomatch.cli:main"}
-geomatch = { call = "geomatch.geomatch:main" }
+geomatch = {call = "geomatch.cli:main"}
 lint = {chain = ["lint:black", "lint:flake8", "lint:isort"]}
 "lint:black" = "black --check src/"
 "lint:flake8" = "flake8 --ignore E501 src/"

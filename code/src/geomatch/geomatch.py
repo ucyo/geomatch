@@ -9,6 +9,7 @@ from pandas import DataFrame
 from pymongo import MongoClient
 
 from . import haversine as hv
+from . import mongo as m
 
 
 def connect():
@@ -80,25 +81,25 @@ def filter_candidates_by_time(center, candidate_list, delta):
     return result
 
 
-def main():
+def main(distance_threshold_km, delta, ix):
     print("Loading data")
     client = connect()
     tropomi = get_tropomi(client)  # size: 155.654
     iasi = iasi = get_iasi(client)  # size: 657.417
 
-    distance_threshold_km = 160.934
-    delta = timedelta(hours=4)
-    source_id = 0
-
-    center = tropomi.iloc[source_id]
+    center = tropomi.iloc[ix]
     print("Apply time constraints")
     filtered_t = filter_candidates_by_time(center, iasi, delta)
     print("Apply spatial constraints")
     filter_fin = filter_by_distance(center, filtered_t, distance_threshold_km)
+    print(f"There are {filter_fin.index.size} matches for {center._id}")
 
-    print(f"There are {filter_fin.index.size} matches for {source_id}")
-    # plot_results(center, filter_fin, filter_fin.crs)
+    res = m.mongo_query(client, center, distance_threshold_km, delta)
+    print(f"Mongo: There are {filter_fin.index.size} matches for {center._id}")
+
 
 
 if __name__ == "__main__":
-    main()
+    distance_threshold_km = 160.934
+    delta = timedelta(hours=6)
+    main(distance_threshold_km, delta, ix)
