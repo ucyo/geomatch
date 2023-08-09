@@ -2,7 +2,11 @@
 name = "app"
 version = "0.1.0"
 description = "Add a short description here"
-dependencies = []
+dependencies = [
+    "shapely>=2.0.1",
+    "geopandas>=0.13.2",
+    "pymongo==3.13.0",
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 
