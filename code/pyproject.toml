@@ -8,6 +8,7 @@ dependencies = [
     "pymongo==3.13.0",
     "icc_rt>=2020.0.133",
     "numba>=0.57.1",
+    "folium>=0.14.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

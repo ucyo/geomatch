@@ -8,16 +8,22 @@
 
 -e file:.
 attrs==23.1.0
+branca==0.6.0
 certifi==2023.7.22
+charset-normalizer==3.2.0
 click==8.1.6
 click-plugins==1.1.1
 cligj==0.7.2
 fiona==1.9.4.post1
+folium==0.14.0
 geopandas==0.13.2
 icc-rt==2020.0.133
+idna==3.4
 importlib-metadata==6.8.0
 intel-openmp==2020.0.133
+jinja2==3.1.2
 llvmlite==0.40.1
+markupsafe==2.1.3
 numba==0.57.1
 numpy==1.24.4
 packaging==23.1
@@ -26,7 +32,9 @@ pymongo==3.13.0
 pyproj==3.5.0
 python-dateutil==2.8.2
 pytz==2023.3
+requests==2.31.0
 shapely==2.0.1
 six==1.16.0
 tzdata==2023.3
+urllib3==2.0.4
 zipp==3.16.2
