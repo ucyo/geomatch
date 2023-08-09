@@ -1,4 +1,4 @@
-FROM python:3-slim
+FROM python:3-slim as builder
 
 ENV LANG="C.UTF-8" \
     LC_ALL="C.UTF-8" \
@@ -39,4 +39,10 @@ RUN rye sync
 ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/" \
     PATH="/home/python/.local/bin:$PATH"
 
-CMD ["rye", "run", "python"]
+RUN rye build --clean
+
+FROM python:3-slim as prod
+COPY --from=builder /home/python/code/dist/geomatch-0.1.0-py3-none-any.whl .
+ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/"
+RUN pip install geomatch-0.1.0-py3-none-any.whl
+CMD ["python"]
