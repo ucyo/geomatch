@@ -53,14 +53,14 @@ def mongo_query(client, center, distance_km, delta, rparams=None):
     return gm._query_result_to_gdb(result)
 
 
-def main():
+def main(distance_threshold_km, delta, percentage):
     print("Loading data")
     client = gm.connect()
     tropomi = gm.get_tropomi(client)
 
     delta = timedelta(hours=4)
     distance_km = 160.934
-    n = int(tropomi.index.size * 0.0001)
+    n = int(tropomi.index.size * percentage)
 
     print(f"Running {n} queries")
     tic = time.perf_counter()
@@ -71,4 +71,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    distance_threshold_km = 160.934
+    delta = timedelta(hours=6)
+    percentage = 0.01
+    main(distance_threshold_km, delta, percentage)

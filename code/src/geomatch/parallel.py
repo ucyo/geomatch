@@ -51,19 +51,13 @@ def parallel_thread(tropomi, iasi, distance_radius, delta):
                 print(f"There are {data.index.size} matches for {tropomi_id}")
 
 
-def main():
+def main(distance_threshold_km, delta, percentage):
     print("Loading data")
     client = gm.connect()
     tropomi = gm.get_tropomi(client)
     iasi = gm.get_iasi(client)
 
-    distance_threshold_km = 160.934
-    # distance_threshold_m = 10000
-    delta = timedelta(hours=6)
-    # delta = timedelta(minutes=6)
-    # n = 10
-    n = int(tropomi.index.size * 0.01)
-
+    n = int(tropomi.index.size * percentage)
     print(f"Processing {n} data")
 
     tic = time.perf_counter()
@@ -75,4 +69,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    distance_threshold_km = 160.934
+    delta = timedelta(hours=6)
+    percentage = 0.01
+    main(distance_threshold_km, delta, percentage)
