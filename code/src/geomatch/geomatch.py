@@ -5,9 +5,10 @@ import os
 from datetime import timedelta
 
 import geopandas as gpd
-import haversine as hv
 from pandas import DataFrame
 from pymongo import MongoClient
+
+from . import haversine as hv
 
 
 def connect():
