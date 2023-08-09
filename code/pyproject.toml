@@ -1,7 +1,7 @@
 [project]
-name = "app"
+name = "geomatch"
 version = "0.1.0"
-description = "Add a short description here"
+description = "Matching two satellites up in space."
 dependencies = [
     "shapely>=2.0.1",
     "geopandas>=0.13.2",
