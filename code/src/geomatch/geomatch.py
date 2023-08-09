@@ -46,8 +46,8 @@ def _query_result_to_gdb(cursor, index="time"):
     return gdf
 
 
-def get_tropomi(client, index="time"):
-    cursor = client["TROPOMI"].v0.find()
+def get_tropomi(client, query=None, index="time"):
+    cursor = client["TROPOMI"].v0.find(query)
     gdf = _query_result_to_gdb(cursor, index)
     return gdf
 
@@ -81,10 +81,10 @@ def filter_candidates_by_time(center, candidate_list, delta):
     return result
 
 
-def main(distance_threshold_km, delta, ix):
+def main(distance_threshold_km, delta, ix, query=None):
     print("Loading data")
     client = connect()
-    tropomi = get_tropomi(client)  # size: 155.654
+    tropomi = get_tropomi(client, query=query)  # size: 155.654
     iasi = iasi = get_iasi(client)  # size: 657.417
 
     center = tropomi.iloc[ix]
@@ -95,11 +95,12 @@ def main(distance_threshold_km, delta, ix):
     print(f"There are {filter_fin.index.size} matches for {center._id}")
 
     res = m.mongo_query(client, center, distance_threshold_km, delta)
-    print(f"Mongo: There are {filter_fin.index.size} matches for {center._id}")
-
+    length = 0 if res is None else res.index.size
+    print(f"Mongo: There are {length} matches for {center._id}")
 
 
 if __name__ == "__main__":
     distance_threshold_km = 160.934
     delta = timedelta(hours=6)
+    ix = 0
     main(distance_threshold_km, delta, ix)
