@@ -39,7 +39,7 @@ RUN rye sync
 ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/" \
     PATH="/home/python/.local/bin:$PATH"
 
-RUN rye build --wheel --clean
+RUN mkdir dist && rye build --wheel --clean
 
 FROM python:3-slim as prod
 COPY --from=builder /home/python/code/dist /dist
