@@ -34,6 +34,6 @@ allow-direct-references = true
 [tool.rye.scripts]
 geomatch = {call = "geomatch.cli:main"}
 lint = {chain = ["lint:black", "lint:flake8", "lint:isort"]}
-"lint:black" = "black --check src/"
-"lint:flake8" = "flake8 --ignore E501 src/"
-"lint:isort" = "isort --check src/"
+"lint:black" = "black --check src/ tests/"
+"lint:flake8" = "flake8 --ignore E501 src/ tests/"
+"lint:isort" = "isort --check src/ tests/"

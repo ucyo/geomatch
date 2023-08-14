@@ -1,0 +1,227 @@
+[
+  {
+    "from": "New York",
+    "to": "Los Angeles",
+    "distance_km": 3944.42
+  },
+  {
+    "from": "New York",
+    "to": "Chicago",
+    "distance_km": 1147.19
+  },
+  {
+    "from": "New York",
+    "to": "Houston",
+    "distance_km": 2283.54
+  },
+  {
+    "from": "New York",
+    "to": "Miami",
+    "distance_km": 1754.35
+  },
+  {
+    "from": "New York",
+    "to": "London",
+    "distance_km": 5585.23
+  },
+  {
+    "from": "New York",
+    "to": "Paris",
+    "distance_km": 5852.94
+  },
+  {
+    "from": "New York",
+    "to": "Tokyo",
+    "distance_km": 10872.8
+  },
+  {
+    "from": "New York",
+    "to": "Sydney",
+    "distance_km": 15988.01
+  },
+  {
+    "from": "New York",
+    "to": "Cape Town",
+    "distance_km": 12552.37
+  },
+  {
+    "from": "Los Angeles",
+    "to": "Chicago",
+    "distance_km": 2809.54
+  },
+  {
+    "from": "Los Angeles",
+    "to": "Houston",
+    "distance_km": 2210.3
+  },
+  {
+    "from": "Los Angeles",
+    "to": "Miami",
+    "distance_km": 3764.98
+  },
+  {
+    "from": "Los Angeles",
+    "to": "London",
+    "distance_km": 8776.64
+  },
+  {
+    "from": "Los Angeles",
+    "to": "Paris",
+    "distance_km": 9107.09
+  },
+  {
+    "from": "Los Angeles",
+    "to": "Tokyo",
+    "distance_km": 8834.55
+  },
+  {
+    "from": "Los Angeles",
+    "to": "Sydney",
+    "distance_km": 12063.12
+  },
+  {
+    "from": "Los Angeles",
+    "to": "Cape Town",
+    "distance_km": 16053.15
+  },
+  {
+    "from": "Chicago",
+    "to": "Houston",
+    "distance_km": 1513.97
+  },
+  {
+    "from": "Chicago",
+    "to": "Miami",
+    "distance_km": 1913.72
+  },
+  {
+    "from": "Chicago",
+    "to": "London",
+    "distance_km": 6370.66
+  },
+  {
+    "from": "Chicago",
+    "to": "Paris",
+    "distance_km": 6668.92
+  },
+  {
+    "from": "Chicago",
+    "to": "Tokyo",
+    "distance_km": 10161.33
+  },
+  {
+    "from": "Chicago",
+    "to": "Sydney",
+    "distance_km": 14871.24
+  },
+  {
+    "from": "Chicago",
+    "to": "Cape Town",
+    "distance_km": 13658.84
+  },
+  {
+    "from": "Houston",
+    "to": "Miami",
+    "distance_km": 1559.01
+  },
+  {
+    "from": "Houston",
+    "to": "London",
+    "distance_km": 7819.65
+  },
+  {
+    "from": "Houston",
+    "to": "Paris",
+    "distance_km": 8103.25
+  },
+  {
+    "from": "Houston",
+    "to": "Tokyo",
+    "distance_km": 10757.73
+  },
+  {
+    "from": "Houston",
+    "to": "Sydney",
+    "distance_km": 13816.41
+  },
+  {
+    "from": "Houston",
+    "to": "Cape Town",
+    "distance_km": 13851.33
+  },
+  {
+    "from": "Miami",
+    "to": "London",
+    "distance_km": 7139.2
+  },
+  {
+    "from": "Miami",
+    "to": "Paris",
+    "distance_km": 7369.8
+  },
+  {
+    "from": "Miami",
+    "to": "Tokyo",
+    "distance_km": 12021.21
+  },
+  {
+    "from": "Miami",
+    "to": "Sydney",
+    "distance_km": 15029.05
+  },
+  {
+    "from": "Miami",
+    "to": "Cape Town",
+    "distance_km": 12311.95
+  },
+  {
+    "from": "London",
+    "to": "Paris",
+    "distance_km": 343.92
+  },
+  {
+    "from": "London",
+    "to": "Tokyo",
+    "distance_km": 9582.31
+  },
+  {
+    "from": "London",
+    "to": "Sydney",
+    "distance_km": 16989.3
+  },
+  {
+    "from": "London",
+    "to": "Cape Town",
+    "distance_km": 9636.43
+  },
+  {
+    "from": "Paris",
+    "to": "Tokyo",
+    "distance_km": 9735.66
+  },
+  {
+    "from": "Paris",
+    "to": "Sydney",
+    "distance_km": 16957.53
+  },
+  {
+    "from": "Paris",
+    "to": "Cape Town",
+    "distance_km": 9306.84
+  },
+  {
+    "from": "Tokyo",
+    "to": "Sydney",
+    "distance_km": 7792.96
+  },
+  {
+    "from": "Tokyo",
+    "to": "Cape Town",
+    "distance_km": 14729.34
+  },
+  {
+    "from": "Sydney",
+    "to": "Cape Town",
+    "distance_km": 11033.73
+  }
+]
