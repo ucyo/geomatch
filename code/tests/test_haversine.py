@@ -30,3 +30,11 @@ def test_haversine_jit(cities, actual_distances):
     assert math.isclose(
         result, actual_distances["distance_km"], rel_tol=distance_tolerance
     )
+
+# Test case: Check calculated distances against actual values
+@pytest.mark.parametrize("city", cities)
+def test_haversine_jit_self(city):
+    lat1, lon1 = cities[city]["lat"], cities[city]["lon"]
+    lat2, lon2 = cities[city]["lat"], cities[city]["lon"]
+    result = jit_haversine(lat1, lon1, lat2, lon2)
+    assert math.isclose(result, 0, rel_tol=distance_tolerance)
