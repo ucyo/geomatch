@@ -39,10 +39,10 @@ RUN rye sync
 ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/" \
     PATH="/home/python/.local/bin:$PATH"
 
-RUN rye build --clean
+RUN rye build --wheel --clean
 
 FROM python:3-slim as prod
-COPY --from=builder /home/python/code/dist/geomatch-0.1.0-py3-none-any.whl .
+COPY --from=builder /home/python/code/dist /dist
 ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/"
-RUN pip install geomatch-0.1.0-py3-none-any.whl
+RUN pip install /dist/*.whl
 CMD ["python"]
