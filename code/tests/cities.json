@@ -38,5 +38,13 @@
   "Cape Town": {
     "lat": -33.9249,
     "lon": 18.4241
+  },
+  "North Pole": {
+    "lat": -88.9249,
+    "lon": 1.29
+  },
+  "South Pole": {
+    "lat": 88.9249,
+    "lon": 1.29
   }
 }

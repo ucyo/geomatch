@@ -223,5 +223,10 @@
     "from": "Sydney",
     "to": "Cape Town",
     "distance_km": 11033.73
+  },
+  {
+    "from": "North Pole",
+    "to": "South Pole",
+    "distance_km": 19775.13
   }
 ]
