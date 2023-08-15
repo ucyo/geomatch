@@ -1,9 +1,10 @@
 import json
 import math
 
+import numpy as np
 import pytest
 
-from geomatch.haversine import jit_haversine
+from geomatch import haversine as hv
 
 # Load city coordinates from cities.json
 with open("tests/cities.json", "r") as cities_file:
@@ -26,15 +27,40 @@ def test_haversine_jit(cities, actual_distances):
     lat1, lon1 = from_city["lat"], from_city["lon"]
     to_city = cities[actual_distances["to"]]
     lat2, lon2 = to_city["lat"], to_city["lon"]
-    result = jit_haversine(lat1, lon1, lat2, lon2)
+    result = hv.jit_haversine(lat1, lon1, lat2, lon2)
     assert math.isclose(
         result, actual_distances["distance_km"], rel_tol=distance_tolerance
     )
 
-# Test case: Check calculated distances against actual values
+
+# Test case: Check calculated distances for same sources
 @pytest.mark.parametrize("city", cities)
 def test_haversine_jit_self(city):
     lat1, lon1 = cities[city]["lat"], cities[city]["lon"]
     lat2, lon2 = cities[city]["lat"], cities[city]["lon"]
-    result = jit_haversine(lat1, lon1, lat2, lon2)
+    result = hv.jit_haversine(lat1, lon1, lat2, lon2)
     assert math.isclose(result, 0, rel_tol=distance_tolerance)
+
+
+def test_parallel_haversine():
+    ref_loc = "New York"
+    ref_lat = cities[ref_loc]["lat"]
+    ref_lon = cities[ref_loc]["lon"]
+    compare = ["Houston", "Tokyo", "Sydney", "Miami"]
+
+    lats = [cities[x]["lat"] for x in compare]
+    lons = [cities[x]["lon"] for x in compare]
+    tol_km = 3_000
+
+    expected = []
+    for city in compare:
+        for dist in actual_distances:
+            if ref_loc in (dist["from"], dist["to"]) and city in (
+                dist["from"],
+                dist["to"],
+            ):
+                expected.append(tol_km > dist["distance_km"])
+    result = hv.jit_haversine_arr_par(
+        np.array(lats), np.array(lons), ref_lat, ref_lon, tol_km
+    )
+    assert np.equal(result, expected).all()

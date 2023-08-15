@@ -23,8 +23,8 @@ def jit_haversine(lat1, lon1, lat2, lon2):
 
 
 @jit(nopython=True, parallel=True)
-def jit_haversine_arr_par(a1, a2, lat, lon, distance):
-    result = np.full(a1.size, False)
-    for i in prange(0, a1.size):
-        result[i] = jit_haversine(a1[i], a2[i], lat, lon) <= distance
+def jit_haversine_arr_par(arr_lats, arr_lons, lat, lon, distance):
+    result = np.full(arr_lats.size, False)
+    for i in prange(0, arr_lats.size):
+        result[i] = jit_haversine(arr_lats[i], arr_lons[i], lat, lon) <= distance
     return result
