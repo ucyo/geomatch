@@ -9,7 +9,7 @@ from geomatch import geomatch as gm
 
 
 def create_query(center, distance_km, delta):
-    tmin,tmax = gm.temporal_boundaries(center=center, delta=delta)
+    tmin, tmax = gm.temporal_boundaries(center=center, delta=delta)
     result = {
         "$and": [
             {

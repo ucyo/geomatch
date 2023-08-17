@@ -79,7 +79,7 @@ def filter_by_distance(center, candidate_list, distance_km):
 
 
 def filter_by_time(center, candidate_list, delta):
-    tmin,tmax = temporal_boundaries(center, delta)
+    tmin, tmax = temporal_boundaries(center, delta)
 
     mask = candidate_list["timestamp"].between(tmin, tmax)
     result = candidate_list[mask]

@@ -60,7 +60,5 @@ def test_parallel_haversine():
                 dist["to"],
             ):
                 expected.append(tol_km > dist["distance_km"])
-    result = hv.haversine_par(
-        np.array(lats), np.array(lons), ref_lat, ref_lon, tol_km
-    )
+    result = hv.haversine_par(np.array(lats), np.array(lons), ref_lat, ref_lon, tol_km)
     assert np.equal(result, expected).all()

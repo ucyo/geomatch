@@ -13,9 +13,7 @@ def parallel_process(tropomi, iasi, distance_km, delta):
         futures = {}
         for k, center in tropomi.iterrows():
             filtered = gm.filter_by_distance(center, iasi, distance_km)
-            key = executor.submit(
-                gm.filter_by_time, center, filtered, delta
-            )
+            key = executor.submit(gm.filter_by_time, center, filtered, delta)
             futures[key] = center["_id"]
 
         for future in concurrent.futures.as_completed(futures):
@@ -33,9 +31,7 @@ def parallel_thread(tropomi, iasi, distance_km, delta):
         futures = {}
         for k, center in tropomi.iterrows():
             filtered = gm.filter_by_distance(center, iasi, distance_km)
-            key = executor.submit(
-                gm.filter_by_time, center, filtered, delta
-            )
+            key = executor.submit(gm.filter_by_time, center, filtered, delta)
             futures[key] = center["_id"]
 
         for future in concurrent.futures.as_completed(futures):
