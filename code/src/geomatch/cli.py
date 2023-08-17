@@ -37,29 +37,16 @@ def cli():
     type=click.Path(exists=False),
     help="Output json file.",
 )
-def parallel(distance, delta, percentage, output):
-    """Run search algorithm in parallel."""
+@click.option("--mongo/--no-mongo", default=False, help="Use mongoDB instead.")
+def match(distance, delta, percentage, output, mongo):
+    """Run search algorithm in either geomatch or mongo."""
     delta = timedelta(minutes=delta)
-    par_main(distance, delta, percentage, output)
-
-
-@cli.command()
-@click.option(
-    "--distance", default=160.934, help="Radius of spatial search space [km]."
-)
-@click.option(
-    "--delta", default=360, help="Delta in temporal space on each site(!) [min]."
-)
-@click.option(
-    "--percentage",
-    default=0.01,
-    type=click.FloatRange(0, 1),
-    help="Percentage of IASI data [0.0-1.0].",
-)
-def mongo(distance, delta, percentage):
-    """Use database itself for search in parallel."""
-    delta = timedelta(minutes=delta)
-    mongo_main(distance, delta, percentage)
+    if mongo:
+        click.echo("Using mongo for finding matches.")
+        mongo_main(distance, delta, percentage, output)
+    else:
+        click.echo("Using geomatch for finding matches.")
+        par_main(distance, delta, percentage, output)
 
 
 @cli.command()
