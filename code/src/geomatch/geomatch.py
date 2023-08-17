@@ -7,6 +7,7 @@ from datetime import timedelta
 import geopandas as gpd
 from pandas import DataFrame
 from pymongo import MongoClient
+import json
 
 from . import haversine as hv
 from . import mongo as m
@@ -84,6 +85,11 @@ def filter_by_time(center, candidate_list, delta):
     mask = candidate_list["timestamp"].between(tmin, tmax)
     result = candidate_list[mask]
     return result
+
+
+def to_json(fname, obj):
+    with open(fname, "w") as f:
+        json.dump(obj, f)
 
 
 def main(distance_km, delta, ix, query=None):

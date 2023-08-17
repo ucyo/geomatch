@@ -31,10 +31,16 @@ def cli():
     type=click.FloatRange(0, 1),
     help="Percentage of IASI data [0.0-1.0].",
 )
-def parallel(distance, delta, percentage):
+@click.option(
+    "--output",
+    default=None,
+    type=click.Path(exists=False),
+    help="Output json file.",
+)
+def parallel(distance, delta, percentage, output):
     """Run search algorithm in parallel."""
     delta = timedelta(minutes=delta)
-    par_main(distance, delta, percentage)
+    par_main(distance, delta, percentage, output)
 
 
 @cli.command()
