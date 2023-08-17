@@ -82,7 +82,7 @@ def map_results(
     return m
 
 
-def main(distance_threshold_km, delta, ix, query=None, save=None):
+def main(distance_km, delta, ix, query=None, save=None):
     print("Loading data")
     client = gm.connect()
     tropomi = gm.get_tropomi(client, query=query)  # size: 155.654
@@ -90,17 +90,17 @@ def main(distance_threshold_km, delta, ix, query=None, save=None):
 
     center = tropomi.iloc[ix]
     print("Apply time constraints")
-    filtered_t = gm.filter_candidates_by_time(center, iasi, delta)
+    filtered_t = gm.filter_by_time(center, iasi, delta)
     print("Apply spatial constraints")
-    result_geomatch = gm.filter_by_distance(center, filtered_t, distance_threshold_km)
+    result_geomatch = gm.filter_by_distance(center, filtered_t, distance_km)
     print(f"There are {result_geomatch.index.size} matches for {center._id}")
 
-    res = m.mongo_query(client, center, distance_threshold_km, delta)
+    res = m.mongo_query(client, center, distance_km, delta)
     length = 0 if res is None else res.index.size
     print(f"Mongo: There are {length} matches for {center._id}")
 
     if length > 0:
-        plot = map_results(center, distance_threshold_km, result_geomatch, res)
+        plot = map_results(center, distance_km, result_geomatch, res)
 
         if save is not None:
             plot.save(save)
@@ -110,7 +110,7 @@ def main(distance_threshold_km, delta, ix, query=None, save=None):
 
 
 if __name__ == "__main__":
-    distance_threshold_km = 160.934
+    distance_km = 160.934
     delta = timedelta(hours=6)
     ix = 0
-    main(distance_threshold_km, delta, ix)
+    main(distance_km, delta, ix)

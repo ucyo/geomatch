@@ -62,17 +62,17 @@ def only_ids(center, neighbours, key="_id"):
     return {str(center[key]): [str(x) for x in neighbours[key]]}
 
 
-def filter_by_distance(center, candidate_list, distance_radius):
+def filter_by_distance(center, candidate_list, distance_km):
     lat = center.lat
     lon = center.lon
     lats = candidate_list.lat.values
     lons = candidate_list.lon.values
-    mask = hv.jit_haversine_arr_par(lats, lons, lat, lon, distance_radius)
+    mask = hv.haversine_par(lats, lons, lat, lon, distance_km)
     result = candidate_list[mask]
     return result
 
 
-def filter_candidates_by_time(center, candidate_list, delta):
+def filter_by_time(center, candidate_list, delta):
     lower_bound = center.name - delta
     upper_bound = center.name + delta
 
@@ -81,7 +81,7 @@ def filter_candidates_by_time(center, candidate_list, delta):
     return result
 
 
-def main(distance_threshold_km, delta, ix, query=None):
+def main(distance_km, delta, ix, query=None):
     print("Loading data")
     client = connect()
     tropomi = get_tropomi(client, query=query)  # size: 155.654
@@ -89,18 +89,18 @@ def main(distance_threshold_km, delta, ix, query=None):
 
     center = tropomi.iloc[ix]
     print("Apply time constraints")
-    filtered_t = filter_candidates_by_time(center, iasi, delta)
+    filtered_t = filter_by_time(center, iasi, delta)
     print("Apply spatial constraints")
-    filter_fin = filter_by_distance(center, filtered_t, distance_threshold_km)
+    filter_fin = filter_by_distance(center, filtered_t, distance_km)
     print(f"There are {filter_fin.index.size} matches for {center._id}")
 
-    res = m.mongo_query(client, center, distance_threshold_km, delta)
+    res = m.mongo_query(client, center, distance_km, delta)
     length = 0 if res is None else res.index.size
     print(f"Mongo: There are {length} matches for {center._id}")
 
 
 if __name__ == "__main__":
-    distance_threshold_km = 160.934
+    distance_km = 160.934
     delta = timedelta(hours=6)
     ix = 0
-    main(distance_threshold_km, delta, ix)
+    main(distance_km, delta, ix)

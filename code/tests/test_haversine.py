@@ -27,7 +27,7 @@ def test_haversine_jit(cities, actual_distances):
     lat1, lon1 = from_city["lat"], from_city["lon"]
     to_city = cities[actual_distances["to"]]
     lat2, lon2 = to_city["lat"], to_city["lon"]
-    result = hv.jit_haversine(lat1, lon1, lat2, lon2)
+    result = hv.haversine(lat1, lon1, lat2, lon2)
     assert math.isclose(
         result, actual_distances["distance_km"], rel_tol=distance_tolerance
     )
@@ -38,7 +38,7 @@ def test_haversine_jit(cities, actual_distances):
 def test_haversine_jit_self(city):
     lat1, lon1 = cities[city]["lat"], cities[city]["lon"]
     lat2, lon2 = cities[city]["lat"], cities[city]["lon"]
-    result = hv.jit_haversine(lat1, lon1, lat2, lon2)
+    result = hv.haversine(lat1, lon1, lat2, lon2)
     assert math.isclose(result, 0, rel_tol=distance_tolerance)
 
 
@@ -60,7 +60,7 @@ def test_parallel_haversine():
                 dist["to"],
             ):
                 expected.append(tol_km > dist["distance_km"])
-    result = hv.jit_haversine_arr_par(
+    result = hv.haversine_par(
         np.array(lats), np.array(lons), ref_lat, ref_lon, tol_km
     )
     assert np.equal(result, expected).all()
