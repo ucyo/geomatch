@@ -62,6 +62,12 @@ def only_ids(center, neighbours, key="_id"):
     return {str(center[key]): [str(x) for x in neighbours[key]]}
 
 
+def temporal_boundaries(center, delta):
+    tmin = center.name - delta
+    tmax = center.name + delta
+    return (tmin, tmax)
+
+
 def filter_by_distance(center, candidate_list, distance_km):
     lat = center.lat
     lon = center.lon
@@ -73,10 +79,9 @@ def filter_by_distance(center, candidate_list, distance_km):
 
 
 def filter_by_time(center, candidate_list, delta):
-    lower_bound = center.name - delta
-    upper_bound = center.name + delta
+    tmin,tmax = temporal_boundaries(center, delta)
 
-    mask = candidate_list["timestamp"].between(lower_bound, upper_bound)
+    mask = candidate_list["timestamp"].between(tmin, tmax)
     result = candidate_list[mask]
     return result
 
