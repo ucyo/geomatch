@@ -20,24 +20,28 @@ def cli():
 
 @cli.command()
 @click.option(
-    "--distance", default=160.934, help="Radius of spatial search space [km]."
+    "--distance", default=20, show_default=True, help="Spatial tolerance [km]."
 )
 @click.option(
-    "--delta", default=360, help="Delta in temporal space on each site(!) [min]."
+    "--delta", default=120, show_default=True, help="Temporal tolerance [min]."
 )
 @click.option(
     "--percentage",
     default=0.01,
+    show_default=True,
     type=click.FloatRange(0, 1),
-    help="Percentage of IASI data [0.0-1.0].",
+    help="Percentage of IASI data.",
 )
 @click.option(
     "--output",
     default=None,
+    show_default=True,
     type=click.Path(exists=False),
     help="Output json file.",
 )
-@click.option("--mongo/--no-mongo", default=False, help="Use mongoDB instead.")
+@click.option(
+    "--mongo/--no-mongo", show_default=True, default=False, help="Use mongoDB instead."
+)
 def match(distance, delta, percentage, output, mongo):
     """Run search algorithm in either geomatch or mongo."""
     delta = timedelta(minutes=delta)
@@ -52,15 +56,17 @@ def match(distance, delta, percentage, output, mongo):
 @cli.command()
 @click.option(
     "--distance",
-    default=160.934,
+    default=20,
+    show_default=True,
     type=click.FloatRange(min=0, max=6371),
-    help="Radius of spatial search space [km].",
+    help="Spatial tolerance [km].",
 )
 @click.option(
     "--delta",
-    default=360,
+    default=120,
+    show_default=True,
     type=click.IntRange(min=0),
-    help="Delta in temporal space on each site(!) [min].",
+    help="Temporal tolerance [min].",
 )
 @click.option("--id", "ident", default=None, type=str, help="Tropomi ID")
 @click.option(
@@ -79,23 +85,25 @@ def single(distance, delta, ident, ix):
 @cli.command()
 @click.option(
     "--distance",
-    default=160.934,
+    default=20,
+    show_default=True,
     type=click.FloatRange(min=0, max=6371),
-    help="Radius of spatial search space [km].",
+    help="Spatial tolerance [km].",
 )
 @click.option(
     "--delta",
-    default=360,
+    default=120,
+    show_default=True,
     type=click.IntRange(min=0),
-    help="Delta in temporal space on each site(!) [min].",
+    help="Temporal tolerance [min].",
 )
 @click.option("--id", "ident", default=None, type=str, help="Tropomi ID")
 @click.option(
     "--ix", default=0, type=click.IntRange(min=0), help="Index position in Tropomi DB"
 )
-@click.option("--file", default=None)
+@click.option("--file", default=None, help="Output html file.")
 def plot(distance, delta, ident, ix, file):
-    """Create a plot for a single query and compare both search algorithms."""
+    """Plot a TROPOMI entry and compare geomatch/mongo."""
     delta = timedelta(minutes=delta)
     query = None
     if ident:

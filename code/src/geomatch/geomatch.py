@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import json
 import os
 from datetime import timedelta
 
 import geopandas as gpd
 from pandas import DataFrame
 from pymongo import MongoClient
-import json
 
 from . import haversine as hv
 from . import mongo as m

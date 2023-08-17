@@ -2,7 +2,6 @@
 # coding: utf-8
 
 import concurrent.futures
-import json
 import time
 from datetime import timedelta
 
