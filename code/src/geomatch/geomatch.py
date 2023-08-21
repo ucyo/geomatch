@@ -63,11 +63,9 @@ def get_iasi(client, index="time"):
 
 def temporal_boundaries(center, delta, window_center=True):
     """Calculate the temporal boundaries (+- delta/2)."""
-
-
-def temporal_boundaries(center, delta):
-    tmin = center.name - delta
-    tmax = center.name + delta
+    window = delta / 2 if window_center else delta
+    tmin = center.name - window
+    tmax = center.name + window
     return (tmin, tmax)
 
 
