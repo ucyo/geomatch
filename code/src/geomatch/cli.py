@@ -20,10 +20,18 @@ def cli():
 
 @cli.command()
 @click.option(
-    "--distance", default=20, show_default=True, help="Spatial tolerance [km]."
+    "--distance",
+    default=20,
+    show_default=True,
+    type=click.FloatRange(min=0, max=6371),
+    help="Spatial tolerance [km].",
 )
 @click.option(
-    "--delta", default=120, show_default=True, help="Temporal tolerance [min]."
+    "--delta",
+    default=120,
+    show_default=True,
+    type=click.IntRange(min=0),
+    help="Temporal tolerance [min].",
 )
 @click.option(
     "--percentage",
