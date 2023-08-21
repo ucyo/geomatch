@@ -9,6 +9,7 @@ from geomatch import geomatch as gm
 
 
 def parallel_process(tropomi, iasi, distance_km, delta, output=None):
+    """Return all data within temporal and spatial distance with a ProcessPool."""
     with concurrent.futures.ProcessPoolExecutor() as executor:
         futures = {}
         result = dict(
@@ -35,6 +36,7 @@ def parallel_process(tropomi, iasi, distance_km, delta, output=None):
 
 
 def parallel_thread(tropomi, iasi, distance_km, delta, output=None):
+    """Return all data within temporal and spatial distance with a ThreadPool."""
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {}
         result = dict(
@@ -61,6 +63,7 @@ def parallel_thread(tropomi, iasi, distance_km, delta, output=None):
 
 
 def main(distance_km, delta, percentage, output):
+    """Example application of the methods in this module."""
     print("Loading data")
     client = gm.connect()
     tropomi = gm.get_tropomi(client)

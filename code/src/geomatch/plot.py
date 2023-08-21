@@ -10,10 +10,12 @@ from . import mongo as m
 
 
 def generate_map(lat, lon, tiles="Stamen Terrain", zoom_start=5):
+    """Create a Folium map for visualisation."""
     return folium.Map(location=[lat, lon], tiles=tiles, zoom_start=zoom_start)
 
 
 def add_center_marker(m, center, color="darkred", icon="info-sign"):
+    """Add center data point to Folium Map (m)."""
     folium.Marker(
         location=[center.lat, center.lon],
         popup=center.name,
@@ -24,6 +26,7 @@ def add_center_marker(m, center, color="darkred", icon="info-sign"):
 
 
 def add_center_radius(m, center, distance_km):
+    """Add distance threshold to Folium Map (m)."""
     folium.Circle(
         radius=distance_km * 1000,
         location=[center.lat, center.lon],
@@ -35,6 +38,7 @@ def add_center_radius(m, center, distance_km):
 
 
 def add_geomatch_results(m, center, results):
+    """Add Geomatch results to Folium Map (m)."""
     for i, res in results.iterrows():
         time_diff = (center.name - i).total_seconds() / 60
         sign = "+" if time_diff >= 0 else "-"
@@ -49,6 +53,7 @@ def add_geomatch_results(m, center, results):
 
 
 def add_mongo_results(m, results):
+    """Add MongoDB results to Folium Map (m)."""
     for i, res in results.iterrows():
         folium.Circle(
             radius=5000,
@@ -68,6 +73,8 @@ def map_results(
     tiles="Stamen Terrain",
     zoom_start=5,
 ):
+    """Create plot for a single data point from TROPOMI (m)."""
+
     m = generate_map(center.lat, center.lon, tiles, zoom_start)
 
     m = add_center_radius(m, center, distance_km)
@@ -83,6 +90,7 @@ def map_results(
 
 
 def main(distance_km, delta, ix, query=None, save=None):
+    """Example application of the methods defined in this module."""
     print("Loading data")
     client = gm.connect()
     tropomi = gm.get_tropomi(client, query=query)  # size: 155.654

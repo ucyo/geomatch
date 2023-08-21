@@ -9,6 +9,7 @@ from geomatch import geomatch as gm
 
 
 def create_query(center, distance_km, delta):
+    """Create a query for MongoDB using a temporal and spatial threshold."""
     tmin, tmax = gm.temporal_boundaries(center=center, delta=delta)
     result = {
         "$and": [
@@ -29,6 +30,7 @@ def create_query(center, distance_km, delta):
 
 
 def parallel_mongo(client, tropomi, distance_km, delta, rparams=None, output=None):
+    """Return all data within distance and temporal thresholds from MongoDB."""
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {}
         result = dict(
@@ -51,18 +53,19 @@ def parallel_mongo(client, tropomi, distance_km, delta, rparams=None, output=Non
                 found = [str(x) for x in data._id] if data is not None else []
                 print(f"There are {len(found)} matches for {tropomi_id}")
                 result["matches"].append({str(tropomi_id): found})
-
         if output is not None:
             gm.to_json(output, result)
 
 
 def mongo_query(client, center, distance_km, delta, rparams=None):
+    """Return all data within distance and temporal window using MongoDB."""
     multiparam = create_query(center, distance_km, delta)
     result = client["IASI"].v0.find(multiparam, rparams)
     return gm._query_result_to_gdb(result)
 
 
 def main(distance_km, delta, percentage, output):
+    """Example application of the methods in this module."""
     print("Loading data")
     client = gm.connect()
     tropomi = gm.get_tropomi(client)

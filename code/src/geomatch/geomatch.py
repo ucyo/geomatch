@@ -48,19 +48,21 @@ def _query_result_to_gdb(cursor, index="time"):
 
 
 def get_tropomi(client, query=None, index="time"):
+    """Get all of the TROPOMI data from the client."""
     cursor = client["TROPOMI"].v0.find(query)
     gdf = _query_result_to_gdb(cursor, index)
     return gdf
 
 
 def get_iasi(client, index="time"):
+    """Get all of the IASI data from the client."""
     cursor = client["IASI"].v0.find()
     gdf = _query_result_to_gdb(cursor, index)
     return gdf
 
 
-def only_ids(center, neighbours, key="_id"):
-    return {str(center[key]): [str(x) for x in neighbours[key]]}
+def temporal_boundaries(center, delta, window_center=True):
+    """Calculate the temporal boundaries (+- delta/2)."""
 
 
 def temporal_boundaries(center, delta):
@@ -70,6 +72,7 @@ def temporal_boundaries(center, delta):
 
 
 def filter_by_distance(center, candidate_list, distance_km):
+    """Return only the candidates within a certain distance."""
     lat = center.lat
     lon = center.lon
     lats = candidate_list.lat.values
@@ -80,6 +83,7 @@ def filter_by_distance(center, candidate_list, distance_km):
 
 
 def filter_by_time(center, candidate_list, delta):
+    """Return only the candidates within a certain time window."""
     tmin, tmax = temporal_boundaries(center, delta)
 
     mask = candidate_list["timestamp"].between(tmin, tmax)
@@ -88,11 +92,13 @@ def filter_by_time(center, candidate_list, delta):
 
 
 def to_json(fname, obj):
+    """Output object to json file."""
     with open(fname, "w") as f:
         json.dump(obj, f)
 
 
 def main(distance_km, delta, ix, query=None):
+    """Example application of this module."""
     print("Loading data")
     client = connect()
     tropomi = get_tropomi(client, query=query)  # size: 155.654
