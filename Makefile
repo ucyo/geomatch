@@ -2,7 +2,7 @@ container:
 	@echo "===================================================================="
 	@echo "Build Docker Container"
 	@echo "===================================================================="
-	@docker build --tag ucyo/geomatch:prod .
+	@docker build --tag ucyo/geomatch:prod --tag ucyo/geomatch:latest .
 
 prod: container
 	@echo "===================================================================="
