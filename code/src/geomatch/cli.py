@@ -55,7 +55,7 @@ def match(distance, delta, percentage, output, mongo):
     delta = timedelta(minutes=delta)
     if mongo:
         click.echo("Using mongo for finding matches.")
-        mongo_main(distance, delta, percentage, output)
+        mongo_main(distance, delta, percentage, output=output)
     else:
         click.echo("Using geomatch for finding matches.")
         par_main(distance, delta, percentage, output)
