@@ -14,14 +14,18 @@ from .plot import main as plot_main
 
 @click.group()
 @click.option(
-    "--distance",
+    "-k",
+    "--km",
+    "distance",
     default=20,
     show_default=True,
     type=click.FloatRange(min=0, max=6371),
     help="Spatial tolerance [km].",
 )
 @click.option(
-    "--delta",
+    "-m",
+    "--min",
+    "delta",
     default=120,
     show_default=True,
     type=click.IntRange(min=0),
@@ -37,6 +41,7 @@ def cli(ctx, distance, delta):
 
 @cli.command()
 @click.option(
+    "-p",
     "--percentage",
     default=1,
     show_default=True,
@@ -80,6 +85,7 @@ def match(ctx, percentage, output, mongo):
     help="Index position in Tropomi DB",
 )
 @click.option(
+    "-o",
     "--output",
     default=None,
     show_default=True,
