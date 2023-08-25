@@ -39,10 +39,13 @@ RUN rye sync
 ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/:$LD_LIBRARY_PATH" \
     PATH="/home/python/.local/bin:$PATH"
 
+FROM builder as packager
+COPY --chown=python:python ./code /home/python/code/
+WORKDIR /home/python/code
 RUN mkdir dist && rye build --wheel --clean
 
 FROM python:3-slim as prod
-COPY --from=builder /home/python/code/dist /dist
+COPY --from=packager /home/python/code/dist /dist
 ENV LD_LIBRARY_PATH="/usr/local/lib/:/home/python/code/.venv/lib/:$LD_LIBRARY_PATH"
 RUN pip install /dist/*.whl
 CMD ["python"]

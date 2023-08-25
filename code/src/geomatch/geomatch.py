@@ -5,7 +5,6 @@ import json
 import os
 from datetime import timedelta
 
-import geopandas as gpd
 from pandas import DataFrame
 from pymongo import MongoClient
 
@@ -32,7 +31,6 @@ def _query_result_to_gdb(cursor, index="time"):
         result = {k: entry[k] for k in ["time", "id", "_id"]}
         result["lat"] = entry["loc"]["coordinates"][1]
         result["lon"] = entry["loc"]["coordinates"][0]
-        result["type"] = entry["loc"]["type"]
         result["timestamp"] = result["time"]
         return result
 
@@ -40,11 +38,8 @@ def _query_result_to_gdb(cursor, index="time"):
     if not entries:
         return None
     df = DataFrame(entries).set_index(index)
-    gdf = gpd.GeoDataFrame(
-        df, geometry=gpd.points_from_xy(df["lon"], df["lat"]), crs="EPSG:4326"
-    )
-    gdf = gdf.sort_index()
-    return gdf
+    df = df.sort_index()
+    return df
 
 
 # TODO: Unify next two calls
