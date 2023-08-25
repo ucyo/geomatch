@@ -23,7 +23,7 @@ WORKDIR /home/python/
 
 RUN curl -sSf https://rye-up.com/get | bash -
 
-COPY --chown=python:python ./code /home/python/code
+COPY --chown=python:python ./code/pyproject.toml ./code/README.md ./code/requirements-dev.lock ./code/requirements.lock /home/python/code/
 WORKDIR /home/python/code
 
 RUN rye config --set-bool behavior.global-python=true
