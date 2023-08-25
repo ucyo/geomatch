@@ -29,7 +29,9 @@ def create_query(center, distance_km, delta):
     return result
 
 
-def parallel_mongo(client, tropomi, distance_km, delta, rparams=None, output=None):
+def parallel_mongo(
+    client, source, distance_km, delta, searchspace, rparams=None, output=None
+):
     """Return all data within distance and temporal thresholds from MongoDB."""
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {}
@@ -38,9 +40,9 @@ def parallel_mongo(client, tropomi, distance_km, delta, rparams=None, output=Non
             delta=f"{delta.total_seconds()/60} min",
             matches=[],
         )
-        for k, center in tropomi.iterrows():
+        for k, center in source.iterrows():
             key = executor.submit(
-                mongo_query, client, center, distance_km, delta, rparams
+                mongo_query, client, center, distance_km, delta, searchspace, rparams
             )
             futures[key] = center["_id"]
         for future in concurrent.futures.as_completed(futures):
@@ -57,23 +59,28 @@ def parallel_mongo(client, tropomi, distance_km, delta, rparams=None, output=Non
             gm.to_json(output, result)
 
 
-def mongo_query(client, center, distance_km, delta, rparams=None):
+def mongo_query(client, center, distance_km, delta, searchspace, rparams=None):
     """Return all data within distance and temporal window using MongoDB."""
     multiparam = create_query(center, distance_km, delta)
-    result = client["IASI"].v0.find(multiparam, rparams)
+    result = client[searchspace].v0.find(multiparam, rparams)
     return gm._query_result_to_gdb(result)
 
 
-def main(distance_km, delta, percentage, output):
+def main(distance_km, delta, percentage, output, tropomi_in_iasi: bool):
     """Example application of the methods in this module."""
     print("Loading data")
     client = gm.connect()
-    tropomi = gm.get_tropomi(client)
-    n = int(tropomi.index.size * percentage)
+    if tropomi_in_iasi:
+        source = gm.get_tropomi(client)
+        searchspace = "IASI"
+    else:
+        source = gm.get_iasi(client)
+        searchspace = "TROPOMI"
+    n = int(source.index.size * percentage)
 
     print(f"Running {n} queries")
     tic = time.perf_counter()
-    parallel_mongo(client, tropomi[:n], distance_km, delta, output=output)
+    parallel_mongo(client, source[:n], distance_km, delta, searchspace, output=output)
     toc = time.perf_counter()
 
     print(f"Calculation was done in {toc - tic:0.4f} seconds")
@@ -84,4 +91,5 @@ if __name__ == "__main__":
     delta = timedelta(hours=6)
     percentage = 0.01
     output = None
-    main(distance_km, delta, percentage, output)
+    tropomi_in_iasi = True
+    main(distance_km, delta, percentage, output, tropomi_in_iasi)

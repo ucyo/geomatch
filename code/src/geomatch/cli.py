@@ -31,12 +31,20 @@ from .plot import main as plot_main
     type=click.IntRange(min=0),
     help="Temporal tolerance [min].",
 )
+@click.option(
+    "--search-tropomi-in-iasi/--search-iasi-in-tropomi",
+    "tropomi_in_iasi",
+    show_default=True,
+    default=True,
+    help="Define source and search satellite.",
+)
 @click.pass_context
-def cli(ctx, distance, delta):
+def cli(ctx, distance, delta, tropomi_in_iasi):
     """Geomatch Tool - Analysis of TROPOMI and IASI satellite tracks."""
     ctx.ensure_object(dict)
     ctx.obj["distance"] = distance
     ctx.obj["delta"] = timedelta(minutes=delta)
+    ctx.obj["tropomi_in_iasi"] = tropomi_in_iasi
 
 
 @cli.command()
@@ -66,13 +74,18 @@ def match(ctx, percentage, output, mongo):
     """Run search algorithm in either geomatch or mongo."""
     distance = ctx.obj["distance"]
     delta = ctx.obj["delta"]
+    tropomi_in_iasi = ctx.obj["tropomi_in_iasi"]
 
     if mongo:
         click.echo("Using mongo for finding matches.")
-        mongo_main(distance, delta, percentage, output=output)
+        mongo_main(
+            distance, delta, percentage, output=output, tropomi_in_iasi=tropomi_in_iasi
+        )
     else:
         click.echo("Using geomatch for finding matches.")
-        par_main(distance, delta, percentage, output)
+        par_main(
+            distance, delta, percentage, output=output, tropomi_in_iasi=tropomi_in_iasi
+        )
 
 
 @cli.command()
@@ -98,14 +111,15 @@ def single(ctx, ident, ix, output):
     distance = ctx.obj["distance"]
     delta = ctx.obj["delta"]
     query = None
+    tropomi_in_iasi = ctx.obj["tropomi_in_iasi"]
 
     if ident:
         query = {"_id": ObjectId(ident)}
         ix = 0
     if output is not None:
-        plot_main(distance, delta, ix, query=query, save=output)
+        plot_main(distance, delta, ix, tropomi_in_iasi, query=query, save=output)
     else:
-        geomatch_main(distance, delta, ix, query=query)
+        geomatch_main(distance, delta, ix, tropomi_in_iasi, query=query)
 
 
 def main():

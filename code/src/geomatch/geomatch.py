@@ -47,6 +47,7 @@ def _query_result_to_gdb(cursor, index="time"):
     return gdf
 
 
+# TODO: Unify next two calls
 def get_tropomi(client, query=None, index="time"):
     """Get all of the TROPOMI data from the client."""
     cursor = client["TROPOMI"].v0.find(query)
@@ -54,9 +55,9 @@ def get_tropomi(client, query=None, index="time"):
     return gdf
 
 
-def get_iasi(client, index="time"):
+def get_iasi(client, query=None, index="time"):
     """Get all of the IASI data from the client."""
-    cursor = client["IASI"].v0.find()
+    cursor = client["IASI"].v0.find(query)
     gdf = _query_result_to_gdb(cursor, index)
     return gdf
 
@@ -95,21 +96,27 @@ def to_json(fname, obj):
         json.dump(obj, f)
 
 
-def main(distance_km, delta, ix, query=None):
+def main(distance_km, delta, ix, tropomi_in_iasi: bool, query=None):
     """Example application of this module."""
     print("Loading data")
     client = connect()
-    tropomi = get_tropomi(client, query=query)  # size: 155.654
-    iasi = iasi = get_iasi(client)  # size: 657.417
+    if tropomi_in_iasi:
+        source = get_tropomi(client, query=query)  # size: 155.654
+        candidates = get_iasi(client)  # size: 657.417
+        searchspace = "IASI"
+    else:
+        candidates = get_tropomi(client, query=query)  # size: 155.654
+        source = get_iasi(client)  # size: 657.417
+        searchspace = "TROPOMI"
 
-    center = tropomi.iloc[ix]
+    center = source.iloc[ix]
     print("Apply time constraints")
-    filtered_t = filter_by_time(center, iasi, delta)
+    filtered_t = filter_by_time(center, candidates, delta)
     print("Apply spatial constraints")
     filter_fin = filter_by_distance(center, filtered_t, distance_km)
     print(f"There are {filter_fin.index.size} matches for {center._id}")
 
-    res = m.mongo_query(client, center, distance_km, delta)
+    res = m.mongo_query(client, center, distance_km, delta, searchspace)
     length = 0 if res is None else res.index.size
     print(f"Mongo: There are {length} matches for {center._id}")
 

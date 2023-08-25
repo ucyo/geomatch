@@ -62,18 +62,22 @@ def parallel_thread(tropomi, iasi, distance_km, delta, output=None):
             gm.to_json(output, result)
 
 
-def main(distance_km, delta, percentage, output):
+def main(distance_km, delta, percentage, output, tropomi_in_iasi: bool):
     """Example application of the methods in this module."""
     print("Loading data")
     client = gm.connect()
-    tropomi = gm.get_tropomi(client)
-    iasi = gm.get_iasi(client)
+    if tropomi_in_iasi:
+        source = gm.get_tropomi(client)
+        candidates = gm.get_iasi(client)
+    else:
+        candidates = gm.get_tropomi(client)
+        source = gm.get_iasi(client)
 
-    n = int(tropomi.index.size * percentage)
+    n = int(source.index.size * percentage)
     print(f"Processing {n} data")
 
     tic = time.perf_counter()
-    parallel_thread(tropomi[:n], iasi, distance_km, delta, output)
+    parallel_thread(source[:n], candidates, distance_km, delta, output)
     toc = time.perf_counter()
 
     print(f"Calculation was done in {toc - tic:0.4f} seconds")
@@ -84,4 +88,5 @@ if __name__ == "__main__":
     delta = timedelta(hours=6)
     percentage = 0.01
     output = None
-    main(distance_km, delta, percentage, output)
+    tropomi_in_iasi = True
+    main(distance_km, delta, percentage, output, tropomi_in_iasi)
