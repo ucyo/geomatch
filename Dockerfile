@@ -36,13 +36,13 @@ RUN rye sync
 # SVML Library Loaded                           : True
 # llvmlite Using SVML Patched LLVM              : True
 # SVML Operational                              : True
-ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/" \
+ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/:$LD_LIBRARY_PATH" \
     PATH="/home/python/.local/bin:$PATH"
 
 RUN mkdir dist && rye build --wheel --clean
 
 FROM python:3-slim as prod
 COPY --from=builder /home/python/code/dist /dist
-ENV LD_LIBRARY_PATH="/home/python/code/.venv/lib/"
+ENV LD_LIBRARY_PATH="/usr/local/lib/:/home/python/code/.venv/lib/:$LD_LIBRARY_PATH"
 RUN pip install /dist/*.whl
 CMD ["python"]
