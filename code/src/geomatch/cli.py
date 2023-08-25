@@ -13,6 +13,7 @@ from .plot import main as plot_main
 
 
 @click.group()
+@click.version_option()
 @click.option(
     "-k",
     "--km",
